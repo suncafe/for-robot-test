@@ -1,19 +1,19 @@
-> * 原文地址：[[1] + [2] - [3] === 9!? Looking into assembly code of coercion](https://wanago.io/2018/04/02/1-2-3-9-looking-into-assembly-code-of-coercion/)
+> * 原文地址：[\[1\] + \[2\] - \[3\] === 9!? Looking into assembly code of coercion](https://wanago.io/2018/04/02/1-2-3-9-looking-into-assembly-code-of-coercion/)
 > * 原文作者：[wanago.io](https://wanago.io)
 > * 译文出自：[掘金翻译计划](https://github.com/xitu/gold-miner)
 > * 本文永久链接：[https://github.com/xitu/gold-miner/blob/master/TODO1/1-2-3-9-looking-into-assembly-code-of-coercion.md](https://github.com/xitu/gold-miner/blob/master/TODO1/1-2-3-9-looking-into-assembly-code-of-coercion.md)
 > * 译者：[sunhaokk](https://github.com/sunhaokk)
 > * 校对者：[Starrier](https://github.com/Starriers)、[Xekin-FE](https://github.com/Xekin-FE)
 
-# [1] + [2] - [3] === 9!? 类型转换深入研究!
+# [1] + [2] - [3] ===9！？类型转换深入研究！
 
-变量值拥有多种格式。而且您可以将一种类型的值转换为另一种类型的值。这叫**类型转换**（也叫显式转换）。如果是在后台中尝试对不匹配的类型执行操作时发生, 叫 **强制转换**（有时也叫隐式转换）。在这篇文章中，我会引导你了解这两个过程，以便更好地理解过程。让我们一起深入研究！
+变量值拥有多种格式。而且您可以将一种类型的值转换为另一种类型的值。这叫**类型转换**（也叫显式转换）。如果是在后台中尝试对不匹配的类型执行操作时发生，叫 **强制转换**（有时也叫隐式转换）。在这篇文章中，我会引导你了解这两个过程，以便更好地理解过程。让我们一起深入研究！
 
 ## 类型转换
 
 ### 原始类型包装
 
-正如我[之前的一篇文章](https://wanago.io/2018/02/12/cloning-objects-in-javascript-looking-under-the-hood-of-reference-and-primitive-types/)所描述的那样,几乎 JavaScript 中的所有原始类型（除了 **null** 和 **undefined** 外）都有围绕它们原始值的对象包装。事实上，你可以直接调用原始类型的构造函数作为包装器将一个值的类型转换为另一个值。
+正如我[之前的一篇文章](https://wanago.io/2018/02/12/cloning-objects-in-javascript-looking-under-the-hood-of-reference-and-primitive-types/)所描述的那样，几乎 JavaScript 中的所有原始类型（除了 **null** 和 **undefined** 外）都有围绕它们原始值的对象包装。事实上，你可以直接调用原始类型的构造函数作为包装器将一个值的类型转换为另一个值。
 
 ```
 String(123); // '123'
@@ -66,7 +66,7 @@ $ node --print-code ./if1.js >> ./if1.asm
 $ node --print-code ./if2.js >> ./if2.asm
 ```
 
-2. 准备一个脚本来比较第四列（汇编操作数）- 我故意跳过这里的内存地址，因为它们可能有所不同。
+2. 准备一个脚本来比较第四列（汇编操作数）—— 我故意跳过这里的内存地址，因为它们可能有所不同。
 
 ```
 #!/bin/bash
@@ -92,7 +92,6 @@ Number('123a45'); // NaN
 parseFloat('123a45'); // 123
 ```
 
-
 ### parseInt 函数
 
 它在解析数字时将数字向下舍入。它可以使用不同的基数。
@@ -106,7 +105,7 @@ parseFloat('0xF'); // 0
 
 函数 parseInt 可以猜测基数或让它作为第二个参数传递。有关其中需要考虑的规则列表，请查看 [MDN web docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt)。
 
-如果传入的数值过大会出问题，所以它不应该被认为是 [**Math.floor**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/floor) (它也会进行类型转换)的替代品：
+如果传入的数值过大会出问题，所以它不应该被认为是 [**Math.floor**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/floor)（它也会进行类型转换）的替代品：
 
 ```
 parseInt('1.261e7'); // 1
@@ -157,9 +156,9 @@ String.prototype.toString.call({}) // Uncaught TypeError: String.prototype.toStr
 
 #### Object.prototype.toString 函数
 
-Object 调用内部 **[[Class]]** 。它是代表对象类型的标签。
+Object 调用内部 **\[[Class]]** 。它是代表对象类型的标签。
 
-**Object.prototype.toString** 返回一个 `[object ${tag}]` 字符串。 要么它是内置标签之一 (例如  “Array”, “String”, “Object”, “Date” ), 或者它被明确设置。
+**Object.prototype.toString** 返回一个 `[object ${tag}]` 字符串。 要么它是内置标签之一（例如 “Array”, “String”, “Object”, “Date”），或者它被明确设置。
 
 ```
 const dogName = 'Fluffy';
@@ -249,7 +248,7 @@ new Date('04-02-2018') - '1' // 1522619999999
 -'1' // -1
 ```
 
-日期, 转成数字 [Unix 时间戳](https://en.wikipedia.org/wiki/Unix_time)。
+日期，转成数字 [Unix 时间戳](https://en.wikipedia.org/wiki/Unix_time)。
 
 ## 叹号
 
@@ -300,7 +299,6 @@ x["[object Object]"]; // "bar"
 
 隐式转换在 [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)也会发生。尝试在这里重载 **toString** 函数：
 
-
 ```
 const Dog = function(name) {
   this.name = name;
@@ -312,6 +310,7 @@ Dog.prototype.toString = function() {
 const dog = new Dog('Fluffy');
 console.log(`${dog} is a good dog!`); // "Fluffy is a good dog!"
 ```
+
 隐式转换也是为什么**比较运算符**（==）可能被认为是不好的做法，因为如果它们的类型不匹配，它会尝试通过强制转换进行匹配。
 
 查看这个例子以获得一个关于比较的有趣事实：
@@ -324,22 +323,24 @@ foo === foo2 // false
 foo >= foo2 // true
 ```
 
-因为我们在这里使用了 **new** 关键字，所以 foo 和 foo2 都保留了它们的原始值（这是 'foo' ）的包装。由于他们现在正在引用两个不同的对象， `foo === foo2` 结果为 false。关系操作 ( `>=` ) 在两边调用 **valueOf** 函数。因此，在这里比较原始值内存地址, `'foo' >= 'foo'` 返回 **true**。
+因为我们在这里使用了 **new** 关键字，所以 foo 和 foo2 都保留了它们的原始值（这是 'foo' ）的包装。由于他们现在正在引用两个不同的对象， `foo === foo2` 结果为 false。关系操作（`>=`）在两边调用 **valueOf** 函数。因此，在这里比较原始值内存地址，`'foo' >= 'foo'` 返回 **true**。
 
 ## [1] + [2] – [3] === 9
 
 我希望所有这些知识能帮助你揭开本文标题中问题的神秘面纱。让我们揭开它吧！
 
 1. `[1] + [2]` 这些转换应用 **Array.prototype.toString** 规则然后连接字符串。结果将是 `"12"`。
-  * `[1,2] + [3,4]` 结果是 `"1,23,4"`。
+
+* `[1,2] + [3,4]` 结果是 `"1,23,4"`。
+
 2. `12 - [3]` 将导致 `12` 减 `"3"` 得 `9`
-  * `12 - [3,4]` 因为 `"3,4"`不能转成数字所以得 **NaN** 
+
+* `12 - [3,4]` 因为 `"3,4"`不能转成数字所以得 **NaN** 
 
 ## 总结
 
 尽管很多人可能会建议你避免隐式转换，但我认为了解它的工作原理非常重要。依靠它可能不是一个好主意，但它对您在调试代码和避免首先出现的错误方面大有帮助。
 
-
----
+***
 
 > [掘金翻译计划](https://github.com/xitu/gold-miner) 是一个翻译优质互联网技术文章的社区，文章来源为 [掘金](https://juejin.im) 上的英文分享文章。内容覆盖 [Android](https://github.com/xitu/gold-miner#android)、[iOS](https://github.com/xitu/gold-miner#ios)、[前端](https://github.com/xitu/gold-miner#前端)、[后端](https://github.com/xitu/gold-miner#后端)、[区块链](https://github.com/xitu/gold-miner#区块链)、[产品](https://github.com/xitu/gold-miner#产品)、[设计](https://github.com/xitu/gold-miner#设计)、[人工智能](https://github.com/xitu/gold-miner#人工智能)等领域，想要查看更多优质译文请持续关注 [掘金翻译计划](https://github.com/xitu/gold-miner)、[官方微博](http://weibo.com/juejinfanyi)、[知乎专栏](https://zhuanlan.zhihu.com/juejinfanyi)。
